@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}fr0m.ab0ve{% endblock %}</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+    <!-- Meta -->
+    <meta name="description" content="fr0m.ab0ve — BARAKA KUTOKA JUU.">
+
+    <!-- Custom brand colors -->
+    <style>
+        :root {
+            --brandRed: #ff2d55;
+            --brandBlue: #1e90ff;
+        }
+        .text-brandRed { color: var(--brandRed); }
+        .text-brandBlue { color: var(--brandBlue); }
+        .hover\:text-brandRed:hover { color: var(--brandRed); }
+        .hover\:text-brandBlue:hover { color: var(--brandBlue); }
+    </style>
+</head>
+<body class="bg-black text-white">
+
+<!-- ================= NAV ================= -->
+<header class="fixed top-0 left-0 w-full bg-black text-white px-6 py-4 flex justify-between items-center shadow-md z-50">
+
+    <!-- Left: Logo + Brand -->
+    <div class="flex items-center space-x-3">
+        <img src="{{ url_for('static', filename='media/logo.jpg') }}" 
+             alt="fr0m.ab0ve logo"
+             class="w-10 h-10 object-contain transform transition duration-500 hover:scale-110 hover:-rotate-3">
+
+        <a href="{{ url_for('home') }}"
+           class="text-2xl font-bold tracking-wide hover:text-brandRed transition">
+            fr<span class="text-brandRed">0</span>m.ab<span class="text-brandBlue">0</span>ve
+        </a>
+    </div>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center space-x-6 text-lg">
+        <a href="{{ url_for('feed') }}" class="hover:text-brandRed transition">feed</a>
+        <a href="{{ url_for('shop') }}" class="hover:text-brandRed transition">shop</a>
+        <a href="{{ url_for('about') }}" class="hover:text-brandRed transition">about</a>
+
+        <span class="text-gray-600">|</span>
+
+        {% if session.get("user_id") %}
+            <a href="{{ url_for('profile') }}"
+               class="text-sm uppercase tracking-wide border border-white/30 px-4 py-1 rounded-full
+                      hover:border-brandRed hover:text-brandRed transition">
+                Hi, {{ session.get('username') }}
+            </a>
+            <a href="{{ url_for('logout') }}"
+               class="text-sm uppercase tracking-wide border border-white/30 px-4 py-1 rounded-full
+                      hover:border-brandRed hover:text-brandRed transition">
+                Logout
+            </a>
+        {% else %}
+            <a href="{{ url_for('login') }}"
+               class="text-sm uppercase tracking-wide border border-white/30 px-4 py-1 rounded-full
+                      hover:border-brandRed hover:text-brandRed transition">
+                Login
+            </a>
+            <a href="{{ url_for('signup') }}"
+               class="text-sm uppercase tracking-wide bg-white text-black px-4 py-1 rounded-full
+                      hover:bg-brandRed hover:text-white transition">
+                Sign Up
+            </a>
+        {% endif %}
+    </nav>
+
+    <!-- Mobile Hamburger -->
+    <div class="md:hidden">
+        <button id="menu-btn" aria-label="Open mobile menu" class="text-white focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="h-6 w-6"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor">
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+    </div>
+</header>
+<!-- ======================================= -->
+
+<!-- Mobile Menu -->
+<nav id="mobile-menu"
+     class="hidden fixed top-16 left-0 w-full bg-black/95 backdrop-blur-md
+            flex flex-col items-center gap-6 py-8 z-40">
+
+    <a href="{{ url_for('feed') }}" class="text-lg hover:text-brandRed">feed</a>
+    <a href="{{ url_for('shop') }}" class="text-lg hover:text-brandRed">shop</a>
+    <a href="{{ url_for('about') }}" class="text-lg hover:text-brandRed">about</a>
+
+    <div class="w-2/3 h-px bg-white/20 my-2"></div>
+
+    {% if session.get("user_id") %}
+        <a href="{{ url_for('profile') }}"
+           class="uppercase tracking-wide border border-white/30 px-6 py-2 rounded-full
+                  hover:border-brandRed hover:text-brandRed transition">
+            Hi, {{ session.get('username') }}
+        </a>
+        <a href="{{ url_for('logout') }}"
+           class="uppercase tracking-wide border border-white/30 px-6 py-2 rounded-full
+                  hover:border-brandRed hover:text-brandRed transition">
+            Logout
+        </a>
+    {% else %}
+        <a href="{{ url_for('login') }}"
+           class="uppercase tracking-wide border border-white/30 px-6 py-2 rounded-full
+                  hover:border-brandRed hover:text-brandRed transition">
+            Login
+        </a>
+        <a href="{{ url_for('signup') }}"
+           class="uppercase tracking-wide bg-white text-black px-6 py-2 rounded-full
+                  hover:bg-brandRed hover:text-white transition">
+            Sign Up
+        </a>
+    {% endif %}
+</nav>
+<!-- ======================================= -->
+
+<!-- ============== CONTENT =============== -->
+<main class="pt-24">
+    {% block content %}{% endblock %}
+</main>
+<!-- ======================================= -->
+
+<!-- ============== FOOTER ================ -->
+<footer class="footer mt-12 py-6 text-center text-gray-400">
+    <p>© 2026 fr0m.ab0ve</p>
+    <a href="https://www.instagram.com/fr0m.ab0ve"
+       target="_blank"
+       class="hover:text-brandRed">
+        instagram
+    </a>
+</footer>
+<!-- ======================================= -->
+
+<!-- JS -->
+<script>
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('mobile-menu');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+</script>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

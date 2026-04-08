@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}About — fr0m.ab0ve{% endblock %}
+
+{% block content %}
+
+<!-- ABOUT HERO -->
+<section class="min-h-[60vh] bg-black text-white flex items-center justify-center px-6 relative overflow-hidden">
+
+    <!-- Video Background -->
+    <video
+        autoplay
+        muted
+        loop
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover opacity-70"
+    >
+        <source src="{{ url_for('static', filename='media/videos/about.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 bg-black/60"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-4xl text-center">
+        <h1 class="text-4xl md:text-6xl font-semibold tracking-wide">
+            fr<span class="text-brandRed">0</span>m.ab<span class="text-brandBlue">0</span>ve
+        </h1>
+
+        <p class="mt-6 text-gray-300 text-lg max-w-2xl mx-auto">
+            Heaven Sent
+        </p>
+    </div>
+
+</section>
+
+
+<!-- ABOUT BODY -->
+<section class="bg-black text-white px-6 py-24">
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+
+        <!-- LEFT: MANIFESTO -->
+        <div>
+            <h2 class="text-2xl md:text-3xl mb-6 tracking-wide">
+                The Idea
+            </h2>
+
+            <p class="text-gray-300 leading-relaxed mb-6">
+                fr0m.ab0ve is a Nairobi born creative label where beauty, raw talent, rebellion and visionaries collide with real life. 
+                <br><br>
+                Rising from hardship, carved by spirit and driven by belief that greatness lives in all of us.
+                <br><br>
+                Created from the ground but we move as if guided by something higher and so we fly.
+            </p>
+
+            <p class="text-gray-300 leading-relaxed mb-6">
+                Fashion comes later.
+                Culture comes first.
+                What you wear should feel like truth, not marketing.
+            </p>
+
+            <p class="text-gray-400 text-sm uppercase tracking-wider">
+                Baraka kutoka juu.
+            </p>
+        </div>
+
+        <!-- RIGHT: VALUES -->
+        <div>
+            <h2 class="text-2xl md:text-3xl mb-6 tracking-wide">
+                What We Stand On
+            </h2>
+
+            <ul class="space-y-4 text-gray-300">
+                <li>• Street documentation over perfection</li>
+                <li>• Community over algorithms</li>
+                <li>• Expression over approval</li>
+                <li>• Nairobi, unfiltered</li>
+            </ul>
+
+            <p class="mt-8 text-gray-400 text-sm">
+                Strictly Fly Shit
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- CLOSING LINE -->
+<section class="bg-black px-6 pb-24">
+    <div class="max-w-3xl mx-auto text-center">
+        <p class="text-gray-400 text-sm tracking-wide uppercase">
+            God Bless The Movement
+        </p>
+    </div>
+</section>
+
+{% endblock %}

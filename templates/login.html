@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login — fr0m.ab0ve</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- Prevent caching -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+</head>
+
+<body class="bg-black min-h-screen flex items-center justify-center relative overflow-hidden text-white">
+
+  <!-- Optional background video -->
+  <!--
+  <video autoplay muted loop playsinline
+    class="absolute inset-0 w-full h-full object-cover opacity-20">
+    <source src="{{ url_for('static', filename='videos/above.mp4') }}" type="video/mp4">
+  </video>
+  -->
+
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-black/70"></div>
+
+  <!-- Login Card -->
+  <div class="relative z-10 w-full max-w-md px-8 py-10 border border-white/10 rounded-2xl backdrop-blur-sm"
+       data-aos="fade-up">
+
+    <!-- Brand -->
+    <h1 class="text-center text-3xl tracking-wide font-semibold mb-2">
+      fr<span class="text-brandRed">0</span>m.ab<span class="text-brandBlue">0</span>ve
+    </h1>
+
+    <p class="text-center text-gray-400 text-sm mb-8 uppercase tracking-wider">
+      Welcome Back
+    </p>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-6 space-y-2">
+          {% for category, message in messages %}
+            <div class="px-4 py-2 rounded-lg text-sm border
+              {% if category == 'success' %}
+                border-green-500/30 text-green-400
+              {% elif category == 'error' %}
+                border-red-500/30 text-red-400
+              {% elif category == 'warning' %}
+                border-yellow-500/30 text-yellow-400
+              {% else %}
+                border-white/10 text-gray-300
+              {% endif %}
+            ">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Login Form -->
+    <form method="POST" class="space-y-5" autocomplete="off" id="login-form" novalidate>
+
+      <!-- dummy autofill blockers -->
+      <input type="text" name="username_fake" class="hidden">
+      <input type="password" name="password_fake" class="hidden">
+
+      <input type="email" name="email" placeholder="Email"
+        class="w-full bg-black border border-white/15 px-4 py-3 rounded-lg
+               text-white placeholder-gray-500
+               focus:outline-none focus:border-white/40"
+        autocomplete="new-email"
+        required>
+
+      <input type="password" name="password" placeholder="Password"
+        class="w-full bg-black border border-white/15 px-4 py-3 rounded-lg
+               text-white placeholder-gray-500
+               focus:outline-none focus:border-white/40"
+        autocomplete="new-password"
+        required>
+
+      <button type="submit"
+        class="w-full py-3 rounded-lg border border-white/20
+               hover:border-white/50 transition tracking-wide uppercase text-sm">
+        Enter
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-gray-400 text-sm">
+      Not part of this yet?
+      <a href="{{ url_for('signup') }}"
+         class="text-white underline underline-offset-4 hover:text-gray-300">
+        Join the movement
+      </a>
+    </p>
+
+  </div>
+
+  <script>
+    AOS.init();
+
+    window.addEventListener('load', () => {
+      document.getElementById('login-form').reset();
+    });
+  </script>
+</body>
+</html>

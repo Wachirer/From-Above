@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up — fr0m.ab0ve{% endblock %}
+
+{% block content %}
+
+<!-- SIGNUP HERO -->
+<section class="min-h-screen bg-black text-white relative overflow-hidden flex items-center justify-center px-6">
+
+    <!-- Video Background -->
+    <video
+        autoplay
+        muted
+        loop
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover opacity-70"
+    >
+        <source src="{{ url_for('static', filename='media/videos/signup.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/70"></div>
+
+    <!-- Signup Card -->
+    <div class="relative z-10 w-full max-w-md bg-black/80 backdrop-blur-sm border border-white/10 rounded-xl p-8">
+
+        <h2 class="text-3xl font-semibold text-center tracking-wide mb-2">
+            Join the Movement
+        </h2>
+        <p class="text-gray-400 text-center mb-8 text-sm">
+            Heaven sent. Street driven.
+        </p>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="mb-6 space-y-2">
+              {% for category, message in messages %}
+                <div class="px-4 py-2 rounded-md text-sm
+                    {% if category == 'success' %} bg-green-900/40 text-green-300
+                    {% elif category == 'error' %} bg-red-900/40 text-red-300
+                    {% elif category == 'warning' %} bg-yellow-900/40 text-yellow-300
+                    {% else %} bg-gray-800 text-gray-300 {% endif %}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Form -->
+        <form method="POST" class="space-y-4">
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                required
+                class="w-full bg-black border border-white/20 text-white px-4 py-2 rounded-md focus:outline-none focus:border-white/50 placeholder-gray-500"
+            >
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                required
+                class="w-full bg-black border border-white/20 text-white px-4 py-2 rounded-md focus:outline-none focus:border-white/50 placeholder-gray-500"
+            >
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+                class="w-full bg-black border border-white/20 text-white px-4 py-2 rounded-md focus:outline-none focus:border-white/50 placeholder-gray-500"
+            >
+
+            <button
+                type="submit"
+                class="w-full mt-4 bg-white text-black py-2 rounded-md font-semibold tracking-wide hover:bg-gray-200 transition"
+            >
+                Enter
+            </button>
+        </form>
+
+        <p class="mt-6 text-center text-gray-400 text-sm">
+            Already inside?
+            <a href="{{ url_for('login') }}" class="text-white hover:underline">
+                Log in
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}

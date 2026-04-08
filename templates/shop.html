@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Shop — fr0m.ab0ve{% endblock %}
+
+{% block content %}
+
+<script>
+async function addToCart(productId) {
+    try {
+        const response = await fetch(`/api/add_to_cart/${productId}`, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        if (response.status === 401) {
+            alert("⚠️ Please log in before adding to cart.");
+            window.location.href = "/login?next=/shop";
+            return;
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+            const cartCountEl = document.getElementById("cart-count");
+            if (cartCountEl) cartCountEl.textContent = data.cart_count;
+            localStorage.setItem("cart", JSON.stringify(data.cart));
+
+            const toast = document.createElement('div');
+            toast.textContent = data.message;
+            toast.className = "fixed bottom-4 right-4 bg-brandRed text-white px-4 py-2 rounded-lg shadow-lg";
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+    } catch (err) {
+        console.error("Error adding to cart:", err);
+    }
+}
+</script>
+
+<!-- SHOP HERO -->
+<section class="min-h-40 bg-black text-white flex flex-col items-center justify-center px-6 py-16">
+    <h1 class="text-5xl md:text-6xl font-bold tracking-wide text-center text-white">
+        fr<span class="text-brandRed">0</span>m.ab<span class="text-brandBlue">0</span>ve-ify
+    </h1>
+    <p class="mt-4 text-lg text-gray-400 text-center max-w-2xl">
+        Nairobi is Fly Again. Skate. Style. Culture.
+    </p>
+</section>
+
+<!-- PRODUCT GRID -->
+<section class="bg-black px-6 py-12">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+
+        <!-- Example Product Cards -->
+        {% for product in products %}
+        <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 flex flex-col items-center">
+            
+            <!-- Product Image -->
+            <img src="{{ url_for('static', filename='images/' ~ product.image) }}" 
+                 alt="{{ product.name }}"
+                 class="w-full h-72 object-cover mb-4 transform transition duration-700 hover:scale-105 hover:rotate-1">
+
+            <!-- Product Info -->
+            <h2 class="text-xl font-semibold text-white mb-1">{{ product.name }}</h2>
+            <p class="text-gray-400 mb-1">Ksh. {{ product.price }}</p>
+            <p class="text-green-500 text-sm mb-4">{{ 'In Stock' if product.in_stock else 'Out of Stock' }}</p>
+
+            <!-- Add to Cart Button -->
+            {% if product.in_stock %}
+            <button onclick="addToCart({{ product.id }})"
+                    class="bg-brandRed text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
+                Add to Cart
+            </button>
+            {% else %}
+            <button disabled class="bg-gray-700 text-gray-300 px-6 py-2 rounded-full cursor-not-allowed">
+                Sold Out
+            </button>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+
+{% endblock %}
