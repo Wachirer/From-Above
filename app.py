@@ -28,7 +28,6 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    # Fix potential postgres:// issue
     if DATABASE_URL.startswith("postgres://"):
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
@@ -37,19 +36,11 @@ if DATABASE_URL:
         "connect_args": {"sslmode": "require"}
     }
 else:
-    # Local fallback
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-
-
-def current_user():
-    if "user_id" in session:
-        return User.query.get(session["user_id"])
-    return None
-
 
 
 # ================= MODELS =================
@@ -84,6 +75,18 @@ class Profile(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+# ================= AUTO CREATE TABLES (IMPORTANT FIX) =================
+with app.app_context():
+    db.create_all()
+
+
+# ================= HELPERS =================
+def current_user():
+    if "user_id" in session:
+        return User.query.get(session["user_id"])
+    return None
+
+
 # ================= AUTH ROUTES =================
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -110,7 +113,6 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
 
-        # Auto-create profile
         profile = Profile(user_id=new_user.id, display_name=username)
         db.session.add(profile)
         db.session.commit()
@@ -131,7 +133,7 @@ def login():
 
         if user and check_password_hash(user.password, password):
             session["user_id"] = user.id
-            session["username"] = user.username  # store username for navbar greeting
+            session["username"] = user.username
             flash(f"Welcome back, {user.username}.", "success")
             return redirect(url_for("home"))
 
@@ -223,13 +225,12 @@ def edit_profile():
         city = request.form.get("city")
         mood = request.form.get("mood")
 
-        # Update username if changed
         if username != user.username:
             if User.query.filter_by(username=username).first():
                 flash("Username already taken.", "error")
                 return redirect(url_for("edit_profile"))
             user.username = username
-            session["username"] = username  # update session
+            session["username"] = username
 
         profile.display_name = display_name
         profile.bio = bio
@@ -245,8 +246,4 @@ def edit_profile():
 
 # ================= RUN =================
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        print("Database ready.")
-
     app.run(debug=True)
